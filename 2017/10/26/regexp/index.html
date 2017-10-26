@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="oracle," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="1.取最大值GREATEST（x,y） 2.取最小值LEAST(x,y) 应用实例，时间区间交集计算，两个时间段起始时间中最大值和结束时间中最小值比较，判断有无交集SELECT * FROM PREDICTION X LEFT JOIN POLICE Y  ON X.LINK_ID = Y.LINK_ID AND GREATEST(X.DATE_PERIOD,y.START_TIME)+(1/24">
+<meta name="keywords" content="oracle">
+<meta property="og:type" content="article">
+<meta property="og:title" content="比较大小函数">
+<meta property="og:url" content="http://yoursite.com/2017/10/26/regexp/index.html">
+<meta property="og:site_name" content="李亚涛">
+<meta property="og:description" content="1.取最大值GREATEST（x,y） 2.取最小值LEAST(x,y) 应用实例，时间区间交集计算，两个时间段起始时间中最大值和结束时间中最小值比较，判断有无交集SELECT * FROM PREDICTION X LEFT JOIN POLICE Y  ON X.LINK_ID = Y.LINK_ID AND GREATEST(X.DATE_PERIOD,y.START_TIME)+(1/24">
+<meta property="og:updated_time" content="2017-10-26T14:51:17.324Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="比较大小函数">
+<meta name="twitter:description" content="1.取最大值GREATEST（x,y） 2.取最小值LEAST(x,y) 应用实例，时间区间交集计算，两个时间段起始时间中最大值和结束时间中最小值比较，判断有无交集SELECT * FROM PREDICTION X LEFT JOIN POLICE Y  ON X.LINK_ID = Y.LINK_ID AND GREATEST(X.DATE_PERIOD,y.START_TIME)+(1/24">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/10/26/regexp/"/>
+
+
+
+
+
+  <title>比较大小函数 | 李亚涛</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">李亚涛</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">个人博客</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Accueil
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/26/regexp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李亚涛">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="李亚涛">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">比较大小函数</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posté le</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-26T21:37:42+08:00">
+                2017-10-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h6 id="1-取最大值"><a href="#1-取最大值" class="headerlink" title="1.取最大值"></a>1.取最大值</h6><pre><code>GREATEST（x,y）
+</code></pre><h6 id="2-取最小值"><a href="#2-取最小值" class="headerlink" title="2.取最小值"></a>2.取最小值</h6><pre><code>LEAST(x,y)
+</code></pre><h6 id="应用实例，时间区间交集计算，两个时间段起始时间中最大值和结束时间中最小值比较，判断有无交集"><a href="#应用实例，时间区间交集计算，两个时间段起始时间中最大值和结束时间中最小值比较，判断有无交集" class="headerlink" title="应用实例，时间区间交集计算，两个时间段起始时间中最大值和结束时间中最小值比较，判断有无交集"></a>应用实例，时间区间交集计算，两个时间段起始时间中最大值和结束时间中最小值比较，判断有无交集</h6><pre><code>SELECT * FROM PREDICTION X LEFT JOIN POLICE Y 
+ON X.LINK_ID = Y.LINK_ID AND GREATEST(X.DATE_PERIOD,y.START_TIME)+(1/24/20) &lt; LEAST(X.DATE_PERIOD+(1/12),y.END_TIME);
+</code></pre><h3 id="ORACLE正则匹配"><a href="#ORACLE正则匹配" class="headerlink" title="ORACLE正则匹配"></a>ORACLE正则匹配</h3><pre><code>正则表达式由标准的元字符（metacharacters）所构成： &apos;$&apos; 匹配输入字符串的结尾位置。
+如果设置了 RegExp 对象的 Multiline 属性，则 $ 也匹配 &apos;\n&apos; 或 &apos;\r&apos;。 
+&apos;?&apos; 匹配前面的子表达式零次或一次。&apos;*&apos; 匹配前面的子表达式零次或多次。&apos;|&apos; 指明两项之间的一个选择。
+例子：
+&apos;^([a-z]+|[0-9]+)$&apos;表示所有小写字母或数字组合成的 &apos;( )&apos; 标记一个子表达式的开始和结束位置。
+&apos;{m,n}&apos; 一个精确地出现次数范围，m=&lt;出现次数&lt;=n，&apos;{m}&apos;表示出现m次，&apos;{m,}&apos;表示至少出现m次。
+对所获取的匹配的引用。 
+[[:alpha:]] 任何字母。
+[[:digit:]] 任何数字。
+[[:alnum:]] 任何字母和数字。
+[[:space:]] 任何白字符。
+[[:upper:]] 任何大写字母。
+[[:lower:]] 任何小写字母。
+[[:punct:]] 任何标点符号。
+[[:xdigit:]] 任何16进制的数字，相当于[0-9a-fA-F]。
+\转义符 *, +, ?, {n}, {n,}, {n,m} 限定符^, $, anymetacharacter 位置和顺序。
+</code></pre><h5 id="1-regexp-substr函数格式如下："><a href="#1-regexp-substr函数格式如下：" class="headerlink" title="1.regexp_substr函数格式如下："></a>1.regexp_substr函数格式如下：</h5><pre><code>function REGEXP_SUBSTR(String, pattern, position, occurrence, modifier)
+__srcstr     ：需要进行正则处理的字符串
+__pattern    ：进行匹配的正则表达式
+__position   ：起始位置，从第几个字符开始正则表达式匹配（默认为1）
+__occurrence ：标识第几个匹配组，默认为1
+__modifier   ：模式（&apos;i&apos;不区分大小写进行检索；&apos;c&apos;区分大小写进行检索。默认为&apos;c&apos;。
+</code></pre><h5 id="2-regexp-replace函数格式如下："><a href="#2-regexp-replace函数格式如下：" class="headerlink" title="2.regexp_replace函数格式如下："></a>2.regexp_replace函数格式如下：</h5><pre><code>REGEXP_REPLACE(source_char, pattern, replace_string[,position[,occurrence[,match_parameter]]]])
+source_char  : 字符表达式,这通常是一个字符列，可以是任何数据类型CHAR,VARCHAR2,NCHAR,NVARCHAR2,CLOB或NCLOB
+pattern         : 进行匹配的正则表达式。
+replace_str  : 可选，匹配的模式将替换pattern。如果省略replace_str参数，将删除所有匹配的模式，并返回结果字符串。
+position     : 可选，在字符串中的开始位置搜索。如果省略，则默认为1。
+occurrence   : 可选，是一个非负整数默认为1，指示替换操作的发生：如果指定0，那么所有出现将被替换字符串。
+    如果指定了正整数n，那么将替换第n次出现。
+match_parameter : 模式（&apos;i&apos;不区分大小写进行检索；&apos;c&apos;区分大小写进行检索。默认为&apos;c&apos;）
+例子：
+删除前后标点符号
+SELECT REGEXP_REPLACE(&apos;,张三，李四:&apos;, &apos;[[:punct:]]&apos;) FROM DUAL
+</code></pre><h3 id="oracle函数"><a href="#oracle函数" class="headerlink" title="oracle函数"></a>oracle函数</h3><h5 id="1-trim-函数（trim-ltrim-rtrim）"><a href="#1-trim-函数（trim-ltrim-rtrim）" class="headerlink" title="1.trim 函数（trim,ltrim,rtrim）"></a>1.trim 函数（trim,ltrim,rtrim）</h5><pre><code>SELECT /*TRIM(&apos;;a;b;c;&apos;),*/ ltrim(&apos;;a;b;c;&apos;,&apos;;&apos;), rtrim(&apos;;a;b;c;&apos;,&apos;;&apos;) FROM dual;
+注意：无法使用TRIM(‘;a;b;c;’, ‘;’)的格式
+TRIM() 有它自己的格式
+SELECT TRIM(&apos;;&apos; FROM &apos;;a;b;c;&apos;),
+       TRIM(leading &apos;;&apos; FROM &apos;;a;b;c;&apos;),
+       TRIM(trailing &apos;;&apos; FROM &apos;;a;b;c;&apos;),
+       TRIM(both &apos;;&apos; FROM &apos;;a;b;c;&apos;)
+FROM dual;
+</code></pre><h5 id="2-trunc-函数的用法"><a href="#2-trunc-函数的用法" class="headerlink" title="2.trunc()函数的用法"></a>2.trunc()函数的用法</h5><pre><code>日期
+1.select trunc(sysdate) from dual --2013-01-06 今天的日期为2013-01-06
+2.select trunc(sysdate, &apos;mm&apos;) from dual --2013-01-01 返回当月第一天.
+3.select trunc(sysdate,&apos;yy&apos;) from dual --2013-01-01 返回当年第一天
+4.select trunc(sysdate,&apos;dd&apos;) from dual --2013-01-06 返回当前年月日
+5.select trunc(sysdate,&apos;yyyy&apos;) from dual --2013-01-01 返回当年第一天
+6.select trunc(sysdate,&apos;d&apos;) from dual --2013-01-06 (星期天)返回当前星期的第一天
+7.select trunc(sysdate, &apos;hh&apos;) from dual --2013-01-06 17:00:00 当前时间为17:35 
+8.select trunc(sysdate, &apos;mi&apos;) from dual --2013-01-06 17:35:00 TRUNC()函数没有秒的精
+数字
+TRUNC（number,num_digits） 
+Number ：需要截尾取整的数字。 
+Num_digits ：用于指定取整精度的数字。Num_digits 的默认值为 0。
+TRUNC()函数截取时不进行四舍五入
+9.select trunc(123.458) from dual --123
+10.select trunc(123.458,0) from dual --123
+11.select trunc(123.458,1) from dual --123.4
+12.select trunc(123.458,-1) from dual --120
+13.select trunc(123.458,-4) from dual --0
+14.select trunc(123.458,4) from dual --123.458
+15.select trunc(123) from dual --123
+16.select trunc(123,1) from dual --123
+17.select trunc(123,-1) from dual --120
+</code></pre>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/oracle/" rel="tag"># oracle</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/26/merge/" rel="next" title="MERGE新特性(UPDATE WHERE,DELETE WHERE,INSERT WHERE)">
+                <i class="fa fa-chevron-left"></i> MERGE新特性(UPDATE WHERE,DELETE WHERE,INSERT WHERE)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/26/oracle装配置/" rel="prev" title="oracle 安装配置">
+                oracle 安装配置 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table Des Matières
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Ensemble
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="李亚涛" />
+          <p class="site-author-name" itemprop="name">李亚涛</p>
+           
+              <p class="site-description motion-element" itemprop="description">李亚涛个人博客</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">articles</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-6"><a class="nav-link" href="#1-取最大值"><span class="nav-number">1.</span> <span class="nav-text">1.取最大值</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-取最小值"><span class="nav-number">2.</span> <span class="nav-text">2.取最小值</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#应用实例，时间区间交集计算，两个时间段起始时间中最大值和结束时间中最小值比较，判断有无交集"><span class="nav-number">3.</span> <span class="nav-text">应用实例，时间区间交集计算，两个时间段起始时间中最大值和结束时间中最小值比较，判断有无交集</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ORACLE正则匹配"><span class="nav-number"></span> <span class="nav-text">ORACLE正则匹配</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-regexp-substr函数格式如下："><span class="nav-number"></span> <span class="nav-text">1.regexp_substr函数格式如下：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-regexp-replace函数格式如下："><span class="nav-number"></span> <span class="nav-text">2.regexp_replace函数格式如下：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#oracle函数"><span class="nav-number"></span> <span class="nav-text">oracle函数</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-trim-函数（trim-ltrim-rtrim）"><span class="nav-number"></span> <span class="nav-text">1.trim 函数（trim,ltrim,rtrim）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-trunc-函数的用法"><span class="nav-number"></span> <span class="nav-text">2.trunc()函数的用法</span></a></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">李亚涛</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Thème -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
